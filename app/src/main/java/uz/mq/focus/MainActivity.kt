@@ -19,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var context: Context
     lateinit var navController: NavController
     lateinit var addTask: MenuItem
+    lateinit var addWallet: MenuItem
+    lateinit var taskList: MenuItem
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -47,6 +49,9 @@ class MainActivity : AppCompatActivity() {
         inflater.inflate(R.menu.main_actionbar, menu)
         addTask = menu!!.findItem(R.id.addTask)
         addTask.setVisible(false)
+        addWallet = menu!!.findItem(R.id.addToWallet)
+        addWallet.setVisible(false)
+        taskList = menu!!.findItem(R.id.tasksList)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -54,14 +59,20 @@ class MainActivity : AppCompatActivity() {
         when(index){
             0 -> {
                 addTask.setVisible(false)
+                addWallet.setVisible(false)
+                taskList.setVisible(true)
                 navController.navigate(R.id.todayFragment)
             }
             1 -> {
                 addTask.setVisible(true)
+                addWallet.setVisible(false)
+                taskList.setVisible(false)
                 navController.navigate(R.id.tasksFragment)
             }
             2 -> {
                 addTask.setVisible(false)
+                addWallet.setVisible(true)
+                taskList.setVisible(false)
                 navController.navigate(R.id.walletFragment)
             }
         }

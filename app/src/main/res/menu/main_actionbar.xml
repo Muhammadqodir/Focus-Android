@@ -8,4 +8,16 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_icons8_add"/>
 
+    <item
+        android:id="@+id/addToWallet"
+        android:title="Add task"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_icons8_add"/>
+
+    <item
+        android:id="@+id/tasksList"
+        android:title="Tasks"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_icons8_task_planning"/>
+
 </menu>
