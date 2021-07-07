@@ -43,14 +43,23 @@ class TasksListAdapter(private val items: List<Item>, val context: Context):
         holder.tvTitle?.text = item.title
         holder.tvDeadline?.text = item.deadline
         if (item.priority in 0..3){
-            holder.tvPriority?.text = Utils().categorys[item.priority]
+            holder.tvPriority?.text = Utils().prioritys[item.priority]
             holder.tvPriority?.setBackgroundResource(R.drawable.text_bg)
-            holder.tvPriority?.background?.setColorFilter(Color.parseColor("#343434"),PorterDuff.Mode.SRC_OVER)
+            holder.tvPriority?.background?.setColorFilter(context.resources.getColor(Utils().prioritysColors[item.priority]),PorterDuff.Mode.SRC_OVER)
+        }else{
+            holder.tvPriority?.text = Utils().prioritys[0]
+            holder.tvPriority?.setBackgroundResource(R.drawable.text_bg)
+            holder.tvPriority?.background?.setColorFilter(context.resources.getColor(Utils().prioritysColors[0]),PorterDuff.Mode.SRC_OVER)
         }
         if (item.category in 0..2){
+            holder.ivCategory?.setBackgroundResource(R.drawable.circle)
+            holder.ivCategory?.background?.setColorFilter(context.resources.getColor(Utils().categorysColor[item.priority]),PorterDuff.Mode.SRC_OVER)
             holder.ivCategory?.setImageDrawable(context.resources.getDrawable(Utils().categorysIcon[item.category]))
+        }else{
+            holder.ivCategory?.setBackgroundResource(R.drawable.circle)
+            holder.ivCategory?.background?.setColorFilter(context.resources.getColor(Utils().categorysColor[0]),PorterDuff.Mode.SRC_OVER)
+            holder.ivCategory?.setImageDrawable(context.resources.getDrawable(Utils().categorysIcon[0]))
         }
-        holder.ivCategory
     }
 
     override fun getItemCount(): Int {

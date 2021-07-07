@@ -24,9 +24,9 @@ class TodayFragment : Fragment() {
 
     private fun fillList():ArrayList<TasksListAdapter.Item>{
         val data = ArrayList<TasksListAdapter.Item>()
-        (1..5).forEach { i->
+        (0..3).forEach { i->
             run {
-                data.add(TasksListAdapter.Item("Title " + i, 1, "18.02.2021", 1, ""))
+                data.add(TasksListAdapter.Item("Title " + i, i, "18.02.2021", i, ""))
             }
         }
         return data
