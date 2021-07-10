@@ -1,6 +1,7 @@
 package uz.mq.focus
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -53,6 +54,15 @@ class MainActivity : AppCompatActivity() {
         addWallet.setVisible(false)
         taskList = menu!!.findItem(R.id.tasksList)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.tasksList -> {
+                startActivity(Intent(context, TaskListActivity::class.java))
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     fun showFragment(index: Int): Unit{
