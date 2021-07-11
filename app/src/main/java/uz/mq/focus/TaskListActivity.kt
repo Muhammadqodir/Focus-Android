@@ -3,8 +3,13 @@ package uz.mq.focus
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,10 +17,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import uz.mq.focus.adapters.TasksListAdapter
 
 class TaskListActivity : AppCompatActivity() {
-
+    lateinit var dbHandler: DBHandler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_list)
+        dbHandler = DBHandler(this)
         setActionBar()
         setTitle("TO DO")
         findViews()
@@ -37,14 +43,26 @@ class TaskListActivity : AppCompatActivity() {
 
     private fun showAddTaskDialog(){
         val addTaskDialog = layoutInflater.inflate(R.layout.add_new_task, null)
+        val edTitle = addTaskDialog.findViewById<EditText>(R.id.edTitle)
+        val spPriority = addTaskDialog.findViewById<Spinner>(R.id.spPriority)
+        val spCategory = addTaskDialog.findViewById<Spinner>(R.id.spCategory)
         val dialog = BottomSheetDialog(this)
+        addTaskDialog.findViewById<Button>(R.id.btnCreate).setOnClickListener{
+            val newTask = TasksListAdapter.Item(edTitle.text.toString(), spPriority.selectedItemPosition, "", spCategory.selectedItemPosition)
+            dbHandler.addTask(newTask)
+            Toast.makeText(this, "Added!", Toast.LENGTH_LONG).show();
+            rvAdapter.addItem(newTask)
+            Log.e("List size", rvAdapter.itemCount.toString())
+            dialog.dismiss()
+
+        }
         dialog.setContentView(addTaskDialog)
         dialog.show()
     }
-
+    lateinit var rvAdapter: TasksListAdapter
     private fun findViews(){
         val rvTodayList: RecyclerView = findViewById(R.id.rvTaskList)
-        val rvAdapter:TasksListAdapter? = TasksListAdapter(fillList(), this)
+        rvAdapter = TasksListAdapter(dbHandler.getTasksList(), this)
         rvTodayList.layoutManager = LinearLayoutManager(this)
         rvTodayList.adapter = rvAdapter
     }

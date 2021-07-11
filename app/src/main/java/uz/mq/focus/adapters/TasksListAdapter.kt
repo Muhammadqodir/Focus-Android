@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import uz.mq.focus.R
 import uz.mq.focus.Utils
 
-class TasksListAdapter(private val items: List<Item>, val context: Context):
+class TasksListAdapter(private val items: ArrayList<Item>, val context: Context):
         RecyclerView.Adapter<TasksListAdapter.MyViewHolder>(){
 
     class Item(val title:String, val priority:Int, val deadline:String, val category:Int, val description:String="")
@@ -53,13 +53,18 @@ class TasksListAdapter(private val items: List<Item>, val context: Context):
         }
         if (item.category in 0..2){
             holder.ivCategory?.setBackgroundResource(R.drawable.circle)
-            holder.ivCategory?.background?.setColorFilter(context.resources.getColor(Utils().categorysColor[item.priority]),PorterDuff.Mode.SRC_OVER)
+            holder.ivCategory?.background?.setColorFilter(context.resources.getColor(Utils().categorysColor[item.category]),PorterDuff.Mode.SRC_OVER)
             holder.ivCategory?.setImageDrawable(context.resources.getDrawable(Utils().categorysIcon[item.category]))
         }else{
             holder.ivCategory?.setBackgroundResource(R.drawable.circle)
             holder.ivCategory?.background?.setColorFilter(context.resources.getColor(Utils().categorysColor[0]),PorterDuff.Mode.SRC_OVER)
             holder.ivCategory?.setImageDrawable(context.resources.getDrawable(Utils().categorysIcon[0]))
         }
+    }
+
+    public fun addItem(item:TasksListAdapter.Item){
+        items.add(0, item)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {

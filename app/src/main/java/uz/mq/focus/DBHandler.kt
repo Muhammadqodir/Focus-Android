@@ -13,11 +13,11 @@ val TASKS_TABLE = "Tasks"
 class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASENAME, null,
     1) {
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTable = "CREATE TABLE " + TASKS_TABLE + " (id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(256), priority INTEGER, deadline VARCHAR(256), category INTEGER, description VARCHAR(256)"
+        val createTable = "CREATE TABLE IF NOT EXISTS " + TASKS_TABLE + " (id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(256), priority INTEGER, deadline VARCHAR(256), category INTEGER, description VARCHAR(256))"
         db?.execSQL(createTable)
     }
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        //onCreate(db);
+        onCreate(db);
     }
     fun addTask(user: TasksListAdapter.Item) {
         val database = this.writableDatabase
@@ -36,10 +36,10 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASENAME, 
         }
     }
 
-    fun getTasksList(): MutableList<TasksListAdapter.Item> {
-        val list: MutableList<TasksListAdapter.Item> = ArrayList()
+    fun getTasksList(): ArrayList<TasksListAdapter.Item> {
+        val list: ArrayList<TasksListAdapter.Item> = ArrayList()
         val db = this.readableDatabase
-        val query = "Select * from $TASKS_TABLE"
+        val query = "Select * from $TASKS_TABLE ORDER BY id DESC"
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()) {
             do {

@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_marginLeft="12dp"
-        android:id="@+id/cpCategory"
+        android:id="@+id/spCategory"
         android:theme="@style/Theme.Focus"
         android:entries="@array/categories"
         android:textColor="@color/colorText"
