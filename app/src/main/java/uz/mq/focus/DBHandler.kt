@@ -13,7 +13,7 @@ val TASKS_TABLE = "Tasks"
 class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASENAME, null,
     1) {
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTable = "CREATE TABLE IF NOT EXISTS " + TASKS_TABLE + " (id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(256), priority INTEGER, deadline VARCHAR(256), category INTEGER, tododade VARCHAR(256), completed BOOLEAN, description VARCHAR(256))"
+        val createTable = "CREATE TABLE IF NOT EXISTS " + TASKS_TABLE + " (id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(256), priority INTEGER, deadline VARCHAR(256), category INTEGER, tododate VARCHAR(256), completed BOOLEAN, description VARCHAR(256))"
         db?.execSQL(createTable)
     }
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

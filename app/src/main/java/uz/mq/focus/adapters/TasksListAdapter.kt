@@ -1,15 +1,16 @@
 package uz.mq.focus.adapters
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.PorterDuff
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import uz.mq.focus.R
 import uz.mq.focus.Utils
 
@@ -23,12 +24,14 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context)
         var tvPriority: TextView? = null
         var tvDeadline: TextView? = null
         var ivCategory: ImageView? = null
+        var llParent: LinearLayout? = null
 
         init {
             tvTitle = itemView.findViewById(R.id.tvTitle)
             tvPriority = itemView.findViewById(R.id.tvPriority)
             tvDeadline = itemView.findViewById(R.id.tvDeadline)
             ivCategory = itemView.findViewById(R.id.categoryIcon)
+            llParent = itemView.findViewById(R.id.parent)
         }
     }
 
@@ -60,6 +63,26 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context)
             holder.ivCategory?.background?.setColorFilter(context.resources.getColor(Utils().categorysColor[0]),PorterDuff.Mode.SRC_OVER)
             holder.ivCategory?.setImageDrawable(context.resources.getDrawable(Utils().categorysIcon[0]))
         }
+        holder.llParent?.setOnClickListener {
+            showActionDialog(position)
+        }
+    }
+
+    private fun showActionDialog(index:Int){
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val dialogRoot = inflater.inflate(R.layout.task_actions_dialog, null)
+        val dialog = BottomSheetDialog(context)
+        dialogRoot.findViewById<FloatingActionButton>(R.id.btnRemove).setOnClickListener{
+            //Remove Task
+        }
+        dialogRoot.findViewById<FloatingActionButton>(R.id.btnTomorrow).setOnClickListener{
+            //Do tomorrow
+        }
+        dialogRoot.findViewById<FloatingActionButton>(R.id.btnCompleted).setOnClickListener{
+            //Completed
+        }
+        dialog.setContentView(dialogRoot)
+        dialog.show()
     }
 
     public fun addItem(item:TasksListAdapter.Item){
