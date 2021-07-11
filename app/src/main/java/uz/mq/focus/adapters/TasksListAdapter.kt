@@ -25,6 +25,7 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context)
         var tvDeadline: TextView? = null
         var ivCategory: ImageView? = null
         var llParent: LinearLayout? = null
+        var btnAction: ImageView? = null
 
         init {
             tvTitle = itemView.findViewById(R.id.tvTitle)
@@ -32,6 +33,7 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context)
             tvDeadline = itemView.findViewById(R.id.tvDeadline)
             ivCategory = itemView.findViewById(R.id.categoryIcon)
             llParent = itemView.findViewById(R.id.parent)
+            btnAction = itemView.findViewById(R.id.btnCheck)
         }
     }
 
@@ -65,6 +67,9 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context)
         }
         holder.llParent?.setOnClickListener {
             showActionDialog(position)
+        }
+        holder.btnAction?.setOnClickListener{
+            
         }
     }
 
