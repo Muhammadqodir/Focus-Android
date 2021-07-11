@@ -1,5 +1,8 @@
 package uz.mq.focus
 
+import java.text.SimpleDateFormat
+import java.util.*
+
 class Utils(){
     public val categorys = arrayOf("Work", "Education", "Entertainment")
     public val categorysIcon = arrayOf(R.drawable.ic_c_work, R.drawable.ic_c_education, R.drawable.ic_c_entertainment)
@@ -7,4 +10,18 @@ class Utils(){
     public val prioritysColors = arrayOf(R.color.level3, R.color.level2, R.color.level1, R.color.level0)
 
     public val prioritys = arrayOf("Important & Urgent", "Important & !Urgent", "!Important & Urgent", "!Important & !Urgent")
+
+    public fun getToDayDate(): String {
+        val sdf = SimpleDateFormat("dd.M.yyyy")
+        return sdf.format(Date())
+    }
+
+    public fun getTomorrowDate():String{
+        val calendar = Calendar.getInstance()
+        val today = calendar.time
+        calendar.add(Calendar.DAY_OF_YEAR, 1)
+        val tomorrow = calendar.time
+        val sdf = SimpleDateFormat("dd.M.yyyy")
+        return sdf.format(tomorrow)
+    }
 }

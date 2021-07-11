@@ -26,7 +26,7 @@ class TodayFragment : Fragment() {
         val data = ArrayList<TasksListAdapter.Item>()
         (0..3).forEach { i->
             run {
-                data.add(TasksListAdapter.Item("Title " + i, i, "18.02.2021", i, ""))
+                data.add(TasksListAdapter.Item("Title " + i, i, "18.02.2021", i, "", completed = false))
             }
         }
         return data

@@ -16,7 +16,7 @@ import uz.mq.focus.Utils
 class TasksListAdapter(private val items: ArrayList<Item>, val context: Context):
         RecyclerView.Adapter<TasksListAdapter.MyViewHolder>(){
 
-    class Item(val title:String, val priority:Int, val deadline:String, val category:Int, val description:String="")
+    class Item(val title:String, val priority:Int, val deadline:String, val category:Int, val tododate:String = "undefined", val completed:Boolean, val description:String="")
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         var tvTitle: TextView? = null

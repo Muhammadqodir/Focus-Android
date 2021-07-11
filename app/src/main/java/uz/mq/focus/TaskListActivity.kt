@@ -48,7 +48,7 @@ class TaskListActivity : AppCompatActivity() {
         val spCategory = addTaskDialog.findViewById<Spinner>(R.id.spCategory)
         val dialog = BottomSheetDialog(this)
         addTaskDialog.findViewById<Button>(R.id.btnCreate).setOnClickListener{
-            val newTask = TasksListAdapter.Item(edTitle.text.toString(), spPriority.selectedItemPosition, "", spCategory.selectedItemPosition)
+            val newTask = TasksListAdapter.Item(edTitle.text.toString(), spPriority.selectedItemPosition, "", spCategory.selectedItemPosition, completed = false)
             dbHandler.addTask(newTask)
             Toast.makeText(this, "Added!", Toast.LENGTH_LONG).show();
             rvAdapter.addItem(newTask)
@@ -72,14 +72,4 @@ class TaskListActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
     }
 
-
-    private fun fillList():ArrayList<TasksListAdapter.Item>{
-        val data = ArrayList<TasksListAdapter.Item>()
-        (0..3).forEach { i->
-            run {
-                data.add(TasksListAdapter.Item("Title " + i, i, "18.02.2021", i, ""))
-            }
-        }
-        return data
-    }
 }
