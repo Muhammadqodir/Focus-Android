@@ -61,7 +61,7 @@
                             android:id="@+id/tvPriority"
                             android:textSize="14dp"
                             android:paddingRight="6dp"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:paddingLeft="6dp"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"

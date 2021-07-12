@@ -51,7 +51,8 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASENAME, 
                     , result.getString(result.getColumnIndex("category")).toInt()
                     , result.getString(result.getColumnIndex("tododate"))
                     , result.getString(result.getColumnIndex("completed"))!!.toBoolean()
-                    , result.getString(result.getColumnIndex("description")))
+                    , result.getString(result.getColumnIndex("description"))
+                    , id=result.getString(result.getColumnIndex("id")).toInt())
                 list.add(user)
             }
             while (result.moveToNext())

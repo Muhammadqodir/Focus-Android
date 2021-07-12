@@ -16,7 +16,7 @@ class TodayFragment : Fragment() {
     ): View? {
         val root: View = inflater.inflate(R.layout.fragment_today, container, false)
         val rvTodayList:RecyclerView = root.findViewById(R.id.rvToday)
-        val rvAdapter:TasksListAdapter? = context?.let { TasksListAdapter(fillList(), it) }
+        val rvAdapter:TasksListAdapter? = context?.let { TasksListAdapter(fillList(), it, DBHandler(it)) }
         rvTodayList.layoutManager = LinearLayoutManager(context)
         rvTodayList.adapter = rvAdapter
         return root

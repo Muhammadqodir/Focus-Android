@@ -30,7 +30,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="18dp"
             app:backgroundTint="@color/colorDanger"
-            android:src="@drawable/ic_icons8_delete_trash"
+            android:src="@drawable/ic_cancel_1"
             android:id="@+id/btnCancel"
             android:layout_height="wrap_content"/>
         <com.google.android.material.floatingactionbutton.FloatingActionButton

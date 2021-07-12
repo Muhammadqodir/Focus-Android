@@ -1,6 +1,5 @@
 package uz.mq.focus
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +9,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -62,7 +60,7 @@ class TaskListActivity : AppCompatActivity() {
     lateinit var rvAdapter: TasksListAdapter
     private fun findViews(){
         val rvTodayList: RecyclerView = findViewById(R.id.rvTaskList)
-        rvAdapter = TasksListAdapter(dbHandler.getTasksList(), this)
+        rvAdapter = TasksListAdapter(dbHandler.getTasksList(), this, dbHandler)
         rvTodayList.layoutManager = LinearLayoutManager(this)
         rvTodayList.adapter = rvAdapter
     }

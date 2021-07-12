@@ -8,16 +8,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import uz.mq.focus.ConfirmDialog
+import uz.mq.focus.DBHandler
 import uz.mq.focus.R
 import uz.mq.focus.Utils
 
-class TasksListAdapter(private val items: ArrayList<Item>, val context: Context):
+class TasksListAdapter(private val items: ArrayList<Item>, val context: Context, val dbHandler: DBHandler):
         RecyclerView.Adapter<TasksListAdapter.MyViewHolder>(){
 
-    class Item(val title:String, val priority:Int, val deadline:String, val category:Int, val tododate:String = "undefined", val completed:Boolean, val description:String="")
+    class Item(val title:String, val priority:Int, val deadline:String, val category:Int, val tododate:String = "undefined", val completed:Boolean, val description:String="", val id:Int = -1)
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         var tvTitle: TextView? = null
@@ -69,7 +72,10 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context)
             showActionDialog(position)
         }
         holder.btnAction?.setOnClickListener{
-            
+            val task_id = item.id
+            ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
+                Toast.makeText(context, "Completed $task_id", Toast.LENGTH_LONG).show()
+            }.show()
         }
     }
 

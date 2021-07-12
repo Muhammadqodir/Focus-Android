@@ -10,12 +10,12 @@ class ConfirmDialog(context: Context, inflater: LayoutInflater, action: () -> Un
     var dialog:BottomSheetDialog? = null
 
     init{
-        val dialogRoot = inflater.inflate(R.layout.task_actions_dialog, null)
+        val dialogRoot = inflater.inflate(R.layout.confirm_dialog, null)
         dialog = BottomSheetDialog(context)
         dialogRoot.findViewById<FloatingActionButton>(R.id.btnCancel).setOnClickListener{
             dialog?.dismiss()
         }
-        dialogRoot.findViewById<FloatingActionButton>(R.id.btnCompleted).setOnClickListener{
+        dialogRoot.findViewById<FloatingActionButton>(R.id.btnOk).setOnClickListener{
             action()
         }
         dialog?.setContentView(dialogRoot)
