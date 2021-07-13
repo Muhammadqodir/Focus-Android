@@ -9,15 +9,27 @@
         android:id="@+id/todayFragment"
         android:name="uz.mq.focus.TodayFragment"
         android:label="fragment_today"
-        tools:layout="@layout/fragment_today" />
+        tools:layout="@layout/fragment_today" >
+    <action
+        android:id="@+id/action_firstFragment_to_secondFragment"
+        app:destination="@id/projectsFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/tasksFragment"
+        android:id="@+id/projectsFragment"
         android:name="uz.mq.focus.TasksFragment"
         android:label="fragment_tasks"
-        tools:layout="@layout/fragment_projects" />
+        tools:layout="@layout/fragment_projects">
+        <action
+            android:id="@+id/action_secondFragment_to_thirdFragment"
+            app:destination="@id/walletFragment" />
+    </fragment>
     <fragment
         android:id="@+id/walletFragment"
         android:name="uz.mq.focus.WalletFragment"
         android:label="fragment_wallet"
-        tools:layout="@layout/fragment_wallet" />
+        tools:layout="@layout/fragment_wallet">
+        <action
+            android:id="@+id/action_thirdFragment_to_fourthFragment"
+            app:destination="@id/walletFragment" />
+    </fragment>
 </navigation>

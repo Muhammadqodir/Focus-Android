@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.navigation.NavController
@@ -40,11 +41,17 @@ class MainActivity : AppCompatActivity() {
     private fun initViews(){
         navController = findNavController(R.id.fragment)
         bottomBar = findViewById(R.id.bottomBar)
-        bottomBar.setOnItemSelectedListener {
-            showFragment(it)
-        }
+        val popupMenu = PopupMenu(this, null)
+        popupMenu.inflate(R.menu.menu_bottom)
+        val menu = popupMenu.menu
+        bottomBar.setupWithNavController(menu, navController)
+//        bottomBar.setOnItemSelectedListener {
+//            showFragment(it)
+//        }
     }
-
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.main_actionbar, menu)
@@ -65,26 +72,4 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun showFragment(index: Int): Unit{
-        when(index){
-            0 -> {
-                addTask.setVisible(false)
-                addWallet.setVisible(false)
-                taskList.setVisible(true)
-                navController.navigate(R.id.todayFragment)
-            }
-            1 -> {
-                addTask.setVisible(true)
-                addWallet.setVisible(false)
-                taskList.setVisible(false)
-                navController.navigate(R.id.tasksFragment)
-            }
-            2 -> {
-                addTask.setVisible(false)
-                addWallet.setVisible(true)
-                taskList.setVisible(false)
-                navController.navigate(R.id.walletFragment)
-            }
-        }
-    }
 }
