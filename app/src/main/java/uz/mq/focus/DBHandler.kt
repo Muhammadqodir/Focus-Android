@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import android.widget.Toast
 import uz.mq.focus.adapters.TasksListAdapter
 
@@ -41,7 +42,7 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASENAME, 
     fun getTasksList(): ArrayList<TasksListAdapter.Item> {
         val list: ArrayList<TasksListAdapter.Item> = ArrayList()
         val db = this.readableDatabase
-        val query = "Select * from $TASKS_TABLE ORDER BY id DESC"
+        val query = "Select * from $TASKS_TABLE WHERE completed = 0 ORDER BY id DESC"
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()) {
             do {
@@ -58,5 +59,52 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASENAME, 
             while (result.moveToNext())
         }
         return list
+    }
+
+    fun getTodayTasks(): ArrayList<TasksListAdapter.Item> {
+        val list: ArrayList<TasksListAdapter.Item> = ArrayList()
+        val db = this.readableDatabase
+        val today = Utils().getToDayDate()
+        val query = "Select * from $TASKS_TABLE WHERE tododate = '$today' and completed = 0"
+        val result = db.rawQuery(query, null)
+        if (result.moveToFirst()) {
+            do {
+                val user = TasksListAdapter.Item(result.getString(result.getColumnIndex("title"))
+                    , result.getString(result.getColumnIndex("priority")).toInt()
+                    , result.getString(result.getColumnIndex("deadline"))
+                    , result.getString(result.getColumnIndex("category")).toInt()
+                    , result.getString(result.getColumnIndex("tododate"))
+                    , result.getString(result.getColumnIndex("completed"))!!.toBoolean()
+                    , result.getString(result.getColumnIndex("description"))
+                    , id=result.getString(result.getColumnIndex("id")).toInt())
+                list.add(user)
+            }
+            while (result.moveToNext())
+        }
+        return list
+    }
+
+    fun removeTask(taskId:Int){
+        if(taskId >= 0){
+            val db = this.readableDatabase
+            db.delete(TASKS_TABLE, "id = $taskId", null)
+        }
+    }
+
+    fun planTask(taskId: Int, date: String){
+        if (taskId >= 0){
+            val db = this.readableDatabase
+            val query = "UPDATE $TASKS_TABLE SET tododate = '$date' WHERE id = $taskId"
+            db.execSQL(query)
+        }
+    }
+
+    fun completeTask(taskId: Int){
+        if (taskId >= 0){
+            val db = this.readableDatabase
+            val today = Utils().getToDayDate()
+            val query = "UPDATE $TASKS_TABLE SET tododate = '$today', completed = 1 WHERE id = $taskId"
+            db.execSQL(query)
+        }
     }
 }

@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -16,6 +13,8 @@ import uz.mq.focus.adapters.TasksListAdapter
 
 class TaskListActivity : AppCompatActivity() {
     lateinit var dbHandler: DBHandler
+    lateinit var ivEmpty: ImageView
+    lateinit var rvTodayList: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_list)
@@ -59,8 +58,9 @@ class TaskListActivity : AppCompatActivity() {
     }
     lateinit var rvAdapter: TasksListAdapter
     private fun findViews(){
-        val rvTodayList: RecyclerView = findViewById(R.id.rvTaskList)
-        rvAdapter = TasksListAdapter(dbHandler.getTasksList(), this, dbHandler)
+        rvTodayList = findViewById(R.id.rvTaskList)
+        ivEmpty = findViewById(R.id.ivEmpty)
+        rvAdapter = TasksListAdapter(dbHandler.getTasksList(), this, dbHandler, ivEmpty,true)
         rvTodayList.layoutManager = LinearLayoutManager(this)
         rvTodayList.adapter = rvAdapter
     }

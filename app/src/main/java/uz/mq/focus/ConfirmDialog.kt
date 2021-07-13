@@ -17,6 +17,7 @@ class ConfirmDialog(context: Context, inflater: LayoutInflater, action: () -> Un
         }
         dialogRoot.findViewById<FloatingActionButton>(R.id.btnOk).setOnClickListener{
             action()
+            dialog?.dismiss()
         }
         dialog?.setContentView(dialogRoot)
     }

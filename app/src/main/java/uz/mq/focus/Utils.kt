@@ -12,7 +12,7 @@ class Utils(){
     public val prioritys = arrayOf("Important & Urgent", "Important & !Urgent", "!Important & Urgent", "!Important & !Urgent")
 
     public fun getToDayDate(): String {
-        val sdf = SimpleDateFormat("dd.M.yyyy")
+        val sdf = SimpleDateFormat("dd.MM.yyyy")
         return sdf.format(Date())
     }
 
@@ -21,7 +21,7 @@ class Utils(){
         val today = calendar.time
         calendar.add(Calendar.DAY_OF_YEAR, 1)
         val tomorrow = calendar.time
-        val sdf = SimpleDateFormat("dd.M.yyyy")
+        val sdf = SimpleDateFormat("dd.MM.yyyy")
         return sdf.format(tomorrow)
     }
 }

@@ -2,6 +2,7 @@ package uz.mq.focus.adapters
 
 import android.content.Context
 import android.graphics.PorterDuff
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,7 @@ import uz.mq.focus.DBHandler
 import uz.mq.focus.R
 import uz.mq.focus.Utils
 
-class TasksListAdapter(private val items: ArrayList<Item>, val context: Context, val dbHandler: DBHandler):
+class TasksListAdapter(private val items: ArrayList<Item>, val context: Context, val dbHandler: DBHandler, val vEmpty: View, val isToDoList:Boolean = false):
         RecyclerView.Adapter<TasksListAdapter.MyViewHolder>(){
 
     class Item(val title:String, val priority:Int, val deadline:String, val category:Int, val tododate:String = "undefined", val completed:Boolean, val description:String="", val id:Int = -1)
@@ -69,28 +70,61 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context,
             holder.ivCategory?.setImageDrawable(context.resources.getDrawable(Utils().categorysIcon[0]))
         }
         holder.llParent?.setOnClickListener {
-            showActionDialog(position)
+            showActionDialog(position, item.id)
         }
-        holder.btnAction?.setOnClickListener{
-            val task_id = item.id
-            ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
-                Toast.makeText(context, "Completed $task_id", Toast.LENGTH_LONG).show()
-            }.show()
+        if (isToDoList){
+            holder.btnAction?.setImageResource(R.drawable.ic_tomorrow)
+            holder.btnAction?.setOnClickListener{
+                holder.btnAction?.setOnClickListener{
+                    ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
+                        dbHandler.planTask(item.id, Utils().getToDayDate())
+                        removeItem(position)
+                        Toast.makeText(context, "Planned!", Toast.LENGTH_LONG).show()
+                    }.show()
+                }
+            }
+        }else{
+            holder.btnAction?.setOnClickListener{
+                ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
+                    dbHandler.completeTask(item.id)
+                    removeItem(position)
+                    Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
+                }.show()
+            }
         }
     }
 
-    private fun showActionDialog(index:Int){
+    private fun showActionDialog(index:Int, taskId: Int){
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val dialogRoot = inflater.inflate(R.layout.task_actions_dialog, null)
         val dialog = BottomSheetDialog(context)
         dialogRoot.findViewById<FloatingActionButton>(R.id.btnRemove).setOnClickListener{
-            //Remove Task
+            dialog.dismiss()
+            ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
+                dbHandler.removeTask(taskId)
+                removeItem(index)
+                Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
+            }.show()
         }
         dialogRoot.findViewById<FloatingActionButton>(R.id.btnTomorrow).setOnClickListener{
-            //Do tomorrow
+            dialog.dismiss()
+            var tododate = Utils().getToDayDate()
+            if (!isToDoList){
+                tododate = Utils().getTomorrowDate()
+            }
+            ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
+                dbHandler.planTask(taskId, tododate)
+                removeItem(index)
+                Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
+            }.show()
         }
         dialogRoot.findViewById<FloatingActionButton>(R.id.btnCompleted).setOnClickListener{
-            //Completed
+            dialog.dismiss()
+            ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
+                dbHandler.completeTask(taskId)
+                removeItem(index)
+                Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
+            }.show()
         }
         dialog.setContentView(dialogRoot)
         dialog.show()
@@ -99,6 +133,14 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context,
     public fun addItem(item:TasksListAdapter.Item){
         items.add(0, item)
         notifyDataSetChanged()
+    }
+
+    public fun removeItem(itemIndex: Int){
+        items.removeAt(itemIndex)
+        if (items.size == 0){
+            vEmpty.visibility = View.VISIBLE
+        }
+        notifyItemRemoved(itemIndex)
     }
 
     override fun getItemCount(): Int {
