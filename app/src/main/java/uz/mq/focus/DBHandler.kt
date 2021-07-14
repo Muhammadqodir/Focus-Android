@@ -42,7 +42,7 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASENAME, 
     fun getTasksList(): ArrayList<TasksListAdapter.Item> {
         val list: ArrayList<TasksListAdapter.Item> = ArrayList()
         val db = this.readableDatabase
-        val query = "Select * from $TASKS_TABLE WHERE completed = 0 ORDER BY id DESC"
+        val query = "Select * from $TASKS_TABLE WHERE completed = 0 AND tododate = 'undefined' ORDER BY id DESC"
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()) {
             do {

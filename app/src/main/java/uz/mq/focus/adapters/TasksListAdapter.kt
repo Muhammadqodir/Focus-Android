@@ -1,5 +1,6 @@
 package uz.mq.focus.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.PorterDuff
 import android.util.Log
@@ -47,6 +48,7 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context,
         return MyViewHolder(itemView)
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item:Item = items[position]
         holder.tvTitle?.text = item.title
@@ -72,6 +74,10 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context,
         holder.llParent?.setOnClickListener {
             showActionDialog(position, item.id)
         }
+//        holder.llParent?.setOnLongClickListener{
+//            Toast.makeText(context, position.toString(), Toast.LENGTH_LONG).show()
+//            return@setOnLongClickListener true
+//        }
         if (isToDoList){
             holder.btnAction?.setImageResource(R.drawable.ic_tomorrow)
             holder.btnAction?.setOnClickListener{
@@ -79,7 +85,7 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context,
                     ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
                         dbHandler.planTask(item.id, Utils().getToDayDate())
                         removeItem(position)
-                        Toast.makeText(context, "Planned!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
                     }.show()
                 }
             }
@@ -110,7 +116,7 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context,
             dialog.dismiss()
             var tododate = Utils().getToDayDate()
             if (!isToDoList){
-                tododate = Utils().getTomorrowDate()
+                tododate = "undefined"
             }
             ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
                 dbHandler.planTask(taskId, tododate)
@@ -141,6 +147,7 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context,
             vEmpty.visibility = View.VISIBLE
         }
         notifyItemRemoved(itemIndex)
+        notifyItemRangeChanged(itemIndex, items.size);
     }
 
     override fun getItemCount(): Int {

@@ -45,9 +45,6 @@ class MainActivity : AppCompatActivity() {
         popupMenu.inflate(R.menu.menu_bottom)
         val menu = popupMenu.menu
         bottomBar.setupWithNavController(menu, navController)
-//        bottomBar.setOnItemSelectedListener {
-//            showFragment(it)
-//        }
     }
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
@@ -72,4 +69,23 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    fun switchMenu(index: Int): Unit{
+        when(index){
+            0 -> {
+                addTask.setVisible(false)
+                addWallet.setVisible(false)
+                taskList.setVisible(true)
+            }
+            1 -> {
+                addTask.setVisible(true)
+                addWallet.setVisible(false)
+                taskList.setVisible(false)
+            }
+            2 -> {
+                addTask.setVisible(false)
+                addWallet.setVisible(true)
+                taskList.setVisible(false)
+            }
+        }
+    }
 }

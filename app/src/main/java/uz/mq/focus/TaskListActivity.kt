@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,7 @@ import uz.mq.focus.adapters.TasksListAdapter
 class TaskListActivity : AppCompatActivity() {
     lateinit var dbHandler: DBHandler
     lateinit var ivEmpty: ImageView
-    lateinit var rvTodayList: RecyclerView
+    lateinit var rvTasksList: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_list)
@@ -48,21 +49,32 @@ class TaskListActivity : AppCompatActivity() {
             val newTask = TasksListAdapter.Item(edTitle.text.toString(), spPriority.selectedItemPosition, "", spCategory.selectedItemPosition, completed = false)
             dbHandler.addTask(newTask)
             Toast.makeText(this, "Added!", Toast.LENGTH_LONG).show();
-            rvAdapter.addItem(newTask)
+            fillList()
             Log.e("List size", rvAdapter.itemCount.toString())
             dialog.dismiss()
-
         }
         dialog.setContentView(addTaskDialog)
         dialog.show()
     }
     lateinit var rvAdapter: TasksListAdapter
     private fun findViews(){
-        rvTodayList = findViewById(R.id.rvTaskList)
+        rvTasksList = findViewById(R.id.rvTaskList)
         ivEmpty = findViewById(R.id.ivEmpty)
-        rvAdapter = TasksListAdapter(dbHandler.getTasksList(), this, dbHandler, ivEmpty,true)
-        rvTodayList.layoutManager = LinearLayoutManager(this)
-        rvTodayList.adapter = rvAdapter
+        fillList()
+    }
+
+    fun fillList(){
+        val list = dbHandler.getTasksList()
+        if(list.size > 0){
+            rvTasksList.visibility = View.VISIBLE
+            ivEmpty.visibility = View.GONE
+            rvAdapter = TasksListAdapter(dbHandler.getTasksList(), this, dbHandler, ivEmpty,true)
+            rvTasksList.layoutManager = LinearLayoutManager(this)
+            rvTasksList.adapter = rvAdapter
+        }else{
+            rvTasksList.visibility = View.GONE
+            ivEmpty.visibility = View.VISIBLE
+        }
     }
 
     private fun setActionBar() {
