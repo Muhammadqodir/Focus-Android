@@ -20,9 +20,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var bottomBar: SmoothBottomBar
     lateinit var context: Context
     lateinit var navController: NavController
-    lateinit var addTask: MenuItem
-    lateinit var addWallet: MenuItem
-    lateinit var taskList: MenuItem
+    var addTask: MenuItem? = null
+    var addWallet: MenuItem? = null
+    var taskList: MenuItem? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,6 +45,26 @@ class MainActivity : AppCompatActivity() {
         popupMenu.inflate(R.menu.menu_bottom)
         val menu = popupMenu.menu
         bottomBar.setupWithNavController(menu, navController)
+        navController.addOnDestinationChangedListener(listener)
+    }
+    val listener = NavController.OnDestinationChangedListener{controller, destination, arguments ->
+        when(destination.id){
+            R.id.todayFragment -> {
+                addTask?.setVisible(false)
+                addWallet?.setVisible(false)
+                taskList?.setVisible(true)
+            }
+            R.id.projectsFragment -> {
+                addTask?.setVisible(true)
+                addWallet?.setVisible(false)
+                taskList?.setVisible(false)
+            }
+            R.id.walletFragment -> {
+                addTask?.setVisible(false)
+                addWallet?.setVisible(true)
+                taskList?.setVisible(false)
+            }
+        }
     }
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
@@ -53,9 +73,9 @@ class MainActivity : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.main_actionbar, menu)
         addTask = menu!!.findItem(R.id.addTask)
-        addTask.setVisible(false)
+        addTask?.setVisible(false)
         addWallet = menu!!.findItem(R.id.addToWallet)
-        addWallet.setVisible(false)
+        addWallet?.setVisible(false)
         taskList = menu!!.findItem(R.id.tasksList)
         return super.onCreateOptionsMenu(menu)
     }
@@ -67,25 +87,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    fun switchMenu(index: Int): Unit{
-        when(index){
-            0 -> {
-                addTask.setVisible(false)
-                addWallet.setVisible(false)
-                taskList.setVisible(true)
-            }
-            1 -> {
-                addTask.setVisible(true)
-                addWallet.setVisible(false)
-                taskList.setVisible(false)
-            }
-            2 -> {
-                addTask.setVisible(false)
-                addWallet.setVisible(true)
-                taskList.setVisible(false)
-            }
-        }
     }
 }
