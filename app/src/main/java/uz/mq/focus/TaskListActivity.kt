@@ -10,18 +10,26 @@ import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import uz.mq.focus.adapters.TasksListAdapter
 
 class TaskListActivity : AppCompatActivity() {
-    lateinit var dbHandler: DBHandler
     lateinit var ivEmpty: ImageView
     lateinit var rvTasksList: RecyclerView
+    val database = Firebase.database
+    lateinit var userName: String
+    val TAG:String = "ProjectsFragment"
+    val usersRef = database.getReference("Users")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_list)
-        dbHandler = DBHandler(this)
         setActionBar()
         setTitle("TO DO")
+        userName = Utils().getUserName(this)
         findViews()
     }
 
@@ -46,11 +54,11 @@ class TaskListActivity : AppCompatActivity() {
         val spCategory = addTaskDialog.findViewById<Spinner>(R.id.spCategory)
         val dialog = BottomSheetDialog(this)
         addTaskDialog.findViewById<Button>(R.id.btnCreate).setOnClickListener{
-            val newTask = TasksListAdapter.Item(edTitle.text.toString(), spPriority.selectedItemPosition, "", spCategory.selectedItemPosition, completed = false)
-            dbHandler.addTask(newTask)
+            val ref = DBHelper().getToDoListRef(database, userName);
+            val key:String = ref.push().key!!
+            val newTask = Models.TaskItem(key, edTitle.text.toString(), "", spPriority.selectedItemPosition,  spCategory.selectedItemPosition, "false")
+            ref.child(key).setValue(newTask)
             Toast.makeText(this, "Added!", Toast.LENGTH_LONG).show();
-            fillList()
-            Log.e("List size", rvAdapter.itemCount.toString())
             dialog.dismiss()
         }
         dialog.setContentView(addTaskDialog)
@@ -59,22 +67,36 @@ class TaskListActivity : AppCompatActivity() {
     lateinit var rvAdapter: TasksListAdapter
     private fun findViews(){
         rvTasksList = findViewById(R.id.rvTaskList)
+        rvTasksList.layoutManager = LinearLayoutManager(this)
         ivEmpty = findViewById(R.id.ivEmpty)
         fillList()
     }
 
     fun fillList(){
-        val list = dbHandler.getTasksList()
-        if(list.size > 0){
-            rvTasksList.visibility = View.VISIBLE
-            ivEmpty.visibility = View.GONE
-            rvAdapter = TasksListAdapter(dbHandler.getTasksList(), this, dbHandler, ivEmpty,true)
-            rvTasksList.layoutManager = LinearLayoutManager(this)
-            rvTasksList.adapter = rvAdapter
-        }else{
-            rvTasksList.visibility = View.GONE
-            ivEmpty.visibility = View.VISIBLE
-        }
+        DBHelper().getToDoListRef(database, userName).addValueEventListener(object:
+            ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val tasks:ArrayList<Models.TaskItem> = ArrayList()
+                for (data: DataSnapshot in snapshot.children){
+                    tasks.add(data.getValue(Models.TaskItem::class.java)!!)
+                }
+                if(tasks.size > 0){
+                    ivEmpty.visibility = View.GONE
+                    rvTasksList.visibility = View.VISIBLE
+                    rvAdapter =  TasksListAdapter(tasks, this@TaskListActivity)
+                    rvTasksList.adapter = rvAdapter
+                }else{
+                    ivEmpty.visibility = View.VISIBLE
+                    rvTasksList.visibility = View.GONE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(TAG, "Failed to read value.", error.toException())
+            }
+
+        })
     }
 
     private fun setActionBar() {

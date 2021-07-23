@@ -3,26 +3,17 @@ package uz.mq.focus.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.PorterDuff
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import uz.mq.focus.ConfirmDialog
-import uz.mq.focus.DBHandler
-import uz.mq.focus.R
-import uz.mq.focus.Utils
+import uz.mq.focus.*
 
-class TasksListAdapter(private val items: ArrayList<Item>, val context: Context, val dbHandler: DBHandler, val vEmpty: View, val isToDoList:Boolean = false):
+class TasksListAdapter(private val items: ArrayList<Models.TaskItem>, val context: Context, val isToDoList: Boolean = false):
         RecyclerView.Adapter<TasksListAdapter.MyViewHolder>(){
-
-    class Item(val title:String, val priority:Int, val deadline:String, val category:Int, val tododate:String = "undefined", val completed:Boolean, val description:String="", val id:Int = -1)
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         var tvTitle: TextView? = null
@@ -50,9 +41,8 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context,
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val item:Item = items[position]
+        val item:Models.TaskItem = items[position]
         holder.tvTitle?.text = item.title
-        holder.tvDeadline?.text = item.deadline
         if (item.priority in 0..3){
             holder.tvPriority?.text = Utils().prioritys[item.priority]
             holder.tvPriority?.setBackgroundResource(R.drawable.text_bg)
@@ -72,7 +62,8 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context,
             holder.ivCategory?.setImageDrawable(context.resources.getDrawable(Utils().categorysIcon[0]))
         }
         holder.llParent?.setOnClickListener {
-            showActionDialog(position, item.id)
+            //asdasfdasdfasdf
+//            showActionDialog(position, item.key)
         }
 //        holder.llParent?.setOnLongClickListener{
 //            Toast.makeText(context, position.toString(), Toast.LENGTH_LONG).show()
@@ -82,72 +73,58 @@ class TasksListAdapter(private val items: ArrayList<Item>, val context: Context,
             holder.btnAction?.setImageResource(R.drawable.ic_tomorrow)
             holder.btnAction?.setOnClickListener{
                 holder.btnAction?.setOnClickListener{
-                    ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
-                        dbHandler.planTask(item.id, Utils().getToDayDate())
-                        removeItem(position)
-                        Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
-                    }.show()
+//                    ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
+//                        dbHandler.planTask(item.id, Utils().getToDayDate())
+//                        removeItem(position)
+//                        Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
+//                    }.show()
                 }
             }
         }else{
             holder.btnAction?.setOnClickListener{
-                ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
-                    dbHandler.completeTask(item.id)
-                    removeItem(position)
-                    Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
-                }.show()
+//                ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
+//                    dbHandler.completeTask(item.id)
+//                    removeItem(position)
+//                    Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
+//                }.show()
             }
         }
     }
 
     private fun showActionDialog(index:Int, taskId: Int){
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val dialogRoot = inflater.inflate(R.layout.task_actions_dialog, null)
-        val dialog = BottomSheetDialog(context)
-        dialogRoot.findViewById<FloatingActionButton>(R.id.btnRemove).setOnClickListener{
-            dialog.dismiss()
-            ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
-                dbHandler.removeTask(taskId)
-                removeItem(index)
-                Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
-            }.show()
-        }
-        dialogRoot.findViewById<FloatingActionButton>(R.id.btnTomorrow).setOnClickListener{
-            dialog.dismiss()
-            var tododate = Utils().getToDayDate()
-            if (!isToDoList){
-                tododate = "undefined"
-            }
-            ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
-                dbHandler.planTask(taskId, tododate)
-                removeItem(index)
-                Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
-            }.show()
-        }
-        dialogRoot.findViewById<FloatingActionButton>(R.id.btnCompleted).setOnClickListener{
-            dialog.dismiss()
-            ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
-                dbHandler.completeTask(taskId)
-                removeItem(index)
-                Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
-            }.show()
-        }
-        dialog.setContentView(dialogRoot)
-        dialog.show()
-    }
-
-    public fun addItem(item:TasksListAdapter.Item){
-        items.add(0, item)
-        notifyDataSetChanged()
-    }
-
-    public fun removeItem(itemIndex: Int){
-        items.removeAt(itemIndex)
-        if (items.size == 0){
-            vEmpty.visibility = View.VISIBLE
-        }
-        notifyItemRemoved(itemIndex)
-        notifyItemRangeChanged(itemIndex, items.size);
+//        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+//        val dialogRoot = inflater.inflate(R.layout.task_actions_dialog, null)
+//        val dialog = BottomSheetDialog(context)
+//        dialogRoot.findViewById<FloatingActionButton>(R.id.btnRemove).setOnClickListener{
+//            dialog.dismiss()
+//            ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
+//                dbHandler.removeTask(taskId)
+//                removeItem(index)
+//                Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
+//            }.show()
+//        }
+//        dialogRoot.findViewById<FloatingActionButton>(R.id.btnTomorrow).setOnClickListener{
+//            dialog.dismiss()
+//            var tododate = Utils().getToDayDate()
+//            if (!isToDoList){
+//                tododate = "undefined"
+//            }
+//            ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
+//                dbHandler.planTask(taskId, tododate)
+//                removeItem(index)
+//                Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
+//            }.show()
+//        }
+//        dialogRoot.findViewById<FloatingActionButton>(R.id.btnCompleted).setOnClickListener{
+//            dialog.dismiss()
+//            ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
+//                dbHandler.completeTask(taskId)
+//                removeItem(index)
+//                Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
+//            }.show()
+//        }
+//        dialog.setContentView(dialogRoot)
+//        dialog.show()
     }
 
     override fun getItemCount(): Int {
