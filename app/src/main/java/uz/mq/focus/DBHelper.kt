@@ -7,4 +7,7 @@ class DBHelper{
     public fun getToDoListRef(db: FirebaseDatabase, userName: String):DatabaseReference{
         return db.getReference("Users").child(userName).child("Tasks").child("ToDo")
     }
+    public fun getUserRef(db: FirebaseDatabase, userName: String):DatabaseReference{
+        return db.getReference("Users").child(userName)
+    }
 }

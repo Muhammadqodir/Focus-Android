@@ -1,5 +1,6 @@
 package uz.mq.focus
 
+import android.app.ProgressDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -22,14 +23,15 @@ class TaskListActivity : AppCompatActivity() {
     lateinit var rvTasksList: RecyclerView
     val database = Firebase.database
     lateinit var userName: String
+    var usersRef = database.getReference("Users")
     val TAG:String = "ProjectsFragment"
-    val usersRef = database.getReference("Users")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_list)
         setActionBar()
         setTitle("TO DO")
         userName = Utils().getUserName(this)
+        usersRef = DBHelper().getUserRef(database, userName)
         findViews()
     }
 
@@ -84,7 +86,7 @@ class TaskListActivity : AppCompatActivity() {
                 if(tasks.size > 0){
                     ivEmpty.visibility = View.GONE
                     rvTasksList.visibility = View.VISIBLE
-                    rvAdapter =  TasksListAdapter(tasks, this@TaskListActivity)
+                    rvAdapter =  TasksListAdapter(tasks, this@TaskListActivity, usersRef.child("Tasks"), "ToDo", true)
                     rvTasksList.adapter = rvAdapter
                 }else{
                     ivEmpty.visibility = View.VISIBLE
