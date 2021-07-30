@@ -58,7 +58,7 @@ class TaskListActivity : AppCompatActivity() {
         addTaskDialog.findViewById<Button>(R.id.btnCreate).setOnClickListener{
             val ref = DBHelper().getToDoListRef(database, userName);
             val key:String = ref.push().key!!
-            val newTask = Models.TaskItem(key, edTitle.text.toString(), "", spPriority.selectedItemPosition,  spCategory.selectedItemPosition, "false")
+            val newTask = Models.TaskItem(key, edTitle.text.toString(), "", spPriority.selectedItemPosition,  spCategory.selectedItemPosition, Models.KeyValueItem("empty", "empty"))
             ref.child(key).setValue(newTask)
             Toast.makeText(this, "Added!", Toast.LENGTH_LONG).show();
             dialog.dismiss()
