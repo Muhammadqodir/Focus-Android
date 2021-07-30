@@ -50,7 +50,7 @@ class TodayFragment : Fragment() {
                 if(tasks.size > 0){
                     ivEmpty.visibility = View.GONE
                     rvTodayList.visibility = View.VISIBLE
-                    rvAdapter =  TasksListAdapter(tasks, requireActivity().applicationContext, usersRef, "ToDo")
+                    rvAdapter =  TasksListAdapter(tasks, requireActivity(), usersRef.child("Tasks"), "ToDo")
                     rvTodayList.adapter = rvAdapter
                 }else{
                     ivEmpty.visibility = View.VISIBLE

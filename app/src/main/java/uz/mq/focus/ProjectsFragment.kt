@@ -25,7 +25,7 @@ class TasksFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root: View = inflater.inflate(R.layout.fragment_projects, container, false)
-        rvProjectsList = root.findViewById(R.id.tvPriority)
+        rvProjectsList = root.findViewById(R.id.rvProjects)
         rvProjectsList.layoutManager = LinearLayoutManager(context)
         ivEmpty = root.findViewById(R.id.ivEmpty)
         return root

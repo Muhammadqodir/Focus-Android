@@ -126,11 +126,19 @@ class TasksListAdapter(private val items: ArrayList<Models.TaskItem>, val contex
         }
         dialogRoot.findViewById<FloatingActionButton>(R.id.btnCompleted).setOnClickListener{
             dialog.dismiss()
-            ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
-                tasksRef.child("Today").child(task.key).removeValue()
-                tasksRef.child("Completed").child(task.key).setValue(task)
-                Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
-            }.show()
+            if (isToDoList){
+                ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
+                    tasksRef.child("ToDo").child(task.key).removeValue()
+                    tasksRef.child("Completed").child(task.key).setValue(task)
+                    Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
+                }.show()
+            }else{
+                ConfirmDialog(context, context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater) {
+                    tasksRef.child("Today").child(task.key).removeValue()
+                    tasksRef.child("Completed").child(task.key).setValue(task)
+                    Toast.makeText(context, "Done!", Toast.LENGTH_LONG).show()
+                }.show()
+            }
         }
         dialog.setContentView(dialogRoot)
         dialog.show()
