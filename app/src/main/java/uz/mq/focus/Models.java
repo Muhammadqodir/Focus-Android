@@ -107,7 +107,7 @@ public class Models {
         String name;
         String description;
         String logo;
-        int potentialIncome;
+        String potentialIncome;
         int hours;
 
         public ProjectsItem(){
@@ -130,7 +130,7 @@ public class Models {
             this.logo = logo;
         }
 
-        public void setPotentialIncome(int potentialIncome) {
+        public void setPotentialIncome(String potentialIncome) {
             this.potentialIncome = potentialIncome;
         }
 
@@ -154,7 +154,7 @@ public class Models {
             return logo;
         }
 
-        public int getPotentialIncome() {
+        public String getPotentialIncome() {
             return potentialIncome;
         }
 
@@ -162,7 +162,7 @@ public class Models {
             return hours;
         }
 
-        public ProjectsItem(String key, String name, String description, String logo, int potentialIncome, int hours) {
+        public ProjectsItem(String key, String name, String description, String logo, String potentialIncome, int hours) {
             this.key = key;
             this.name = name;
             this.description = description;

@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/addTask"
-        android:title="Add task"
+        android:id="@+id/newProject"
+        android:title="Create new project"
         app:showAsAction="always"
         android:icon="@drawable/ic_icons8_add"/>
 
